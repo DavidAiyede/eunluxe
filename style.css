@@ -692,6 +692,47 @@ footer h1{
     transition: transform .50s ease-in-out, box-shadow .25s ease;
 }
 
+ .preloader {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    transition: opacity 0.5s ease,
+                visibility 0.5s ease;
+}
+
+.preloader-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.preloader p {
+    font-size: 14px;
+    color: #555;
+    margin-top: 15px;
+}
+
+.preloader.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
 @media (max-width:768px){
     li{
         flex-direction: column;

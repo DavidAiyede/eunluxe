@@ -75,3 +75,12 @@ const video = document.getElementById('mainVideo');
       playBtn.style.pointerEvents = 'auto';
     });
   });
+    // ========== PRELOADER LOGIC ==========
+    const preloader = document.getElementById("preloader");
+
+    // Hide preloader after page loads
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        preloader.classList.add("hide");
+      }, 3000);
+    });
