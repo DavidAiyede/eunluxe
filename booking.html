@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Your Appointment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f4ef;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    /* ===================== PRELOADER ===================== */
+  .preloader {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    transition: opacity 0.5s ease,
+                visibility 0.5s ease;
+}
+
+.preloader-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.preloader p {
+    font-size: 14px;
+    color: #555;
+    margin-top: 15px;
+}
+
+.preloader.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+}
+    /* ===================== PAGE CONTENT ===================== */
+    .top-bar {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid #1a1a1a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      text-decoration: none;
+      color: #1a1a1a;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: #6b6b6b;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+
+    .back-link:hover {
+      color: #8b5e3c;
+    }
+
+    .card {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      padding: 32px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #6b6b6b;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #6b6b6b;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    label span {
+      font-weight: 400;
+      color: #6b6b6b;
+      font-size: 12px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      border: 1px solid #d4c8bc;
+      border-radius: 8px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #8b5e3c;
+      box-shadow: 0 0 0 3px rgba(139,94,60,0.12);
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b6b' d='M6 8.5L1.5 4h9z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      cursor: pointer;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e8e0d8;
+      margin: 24px 0;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: #6b6b6b;
+      margin-bottom: 16px;
+    }
+
+    .upload-box {
+      border: 1.5px dashed #d4c8bc;
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      background: #fdfbf9;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .upload-box:hover {
+      border-color: #8b5e3c;
+      background: #faf6f2;
+    }
+
+    .upload-box.has-file {
+      padding: 12px;
+    }
+
+    .upload-icon {
+      width: 42px;
+      height: 42px;
+      background: #8b5e3c;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 10px;
+    }
+
+    .upload-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .upload-hint {
+      font-size: 12px;
+      color: #6b6b6b;
+      margin-top: 4px;
+    }
+
+    #previewImg {
+      max-width: 100%;
+      max-height: 180px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    #removeBtn {
+      display: none;
+      margin-top: 10px;
+      background: #c0392b;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      background: #8b5e3c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: #7a5134;
+    }
+
+    .error {
+      color: #c0392b;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transition: 0.3s;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+    .top-bar img{
+        width: 70px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ===================== PRELOADER ===================== -->
+<div class="preloader" id="preloader">
+    <img src="./UYz9v.jpg" alt="Loading..." class="preloader-img">
+    <p>Loading...</p>
+</div>
+
+  <!-- ===================== PAGE CONTENT ===================== -->
+  <div class="top-bar">
+    <img src="./UYz9v.jpg" alt="">
+    <button class="back-link" id="backHomeBtn">Back to Home</button>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">YOUR BEAUTY, OUR PASSION</p>
+    <h1>Book Your Appointment</h1>
+    <p class="subtitle">Take a moment for yourself. Choose your service and schedule your next beauty appointment.</p>
+
+    <form id="form">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" required>
+        <div class="error" id="err-name">Please enter your name</div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <div class="error" id="err-email">Please enter a valid email</div>
+      </div>
+
+      <div class="form-group">
+        <label>Choose a Service</label>
+        <select id="service" required>
+          <option value="">Select a service</option>
+          <option value="Hair Treatment">Hair Treatment</option>
+          <option value="Haircut & Styling">Crochet</option>
+          <option value="Hair Coloring">Twisting</option>
+          <option value="Braiding / Protective Styles">Braiding / Protective Styles</option>
+          <option value="Other">Other</option>
+        </select>
+        <div class="error" id="err-service">Please select a service</div>
+      </div>
+
+      <div class="form-group">
+        <label>Appointment Date</label>
+        <input type="date" id="date" required>
+        <div class="error" id="err-date">Please select a date</div>
+      </div>
+
+      <hr class="divider">
+
+      <h2 class="section-title">Tell Us Your Desired Style</h2>
+      <p class="section-desc">Have a particular look in mind? Tell us what you would love. <span style="color:#6b6b6b;font-size:12px">Optional</span></p>
+
+      <div class="form-group">
+        <label>Describe Your Desired Hairstyle <span>Optional</span></label>
+        <textarea id="style" placeholder="Describe your desired hairstyle, length, colour, size..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Upload a Reference Image <span>Optional</span></label>
+        <p class="section-desc" style="margin-bottom:10px;font-size:12.5px">Have a picture of the hairstyle you want?</p>
+
+        <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+          <div id="uploadContent">
+            <div class="upload-icon">+</div>
+            <div class="upload-text">Upload an image</div>
+            <div class="upload-hint">JPG, PNG or WebP · Max 5MB</div>
+          </div>
+          <img id="previewImg" alt="Preview">
+          <button type="button" id="removeBtn" onclick="removeImage(event)">Remove Image</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+      </div>
+
+      <button type="submit" class="btn">
+        Continue Booking →
+      </button>
+    </form>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ============================================
+    //  CHANGE THIS TO THE REAL NUMBER
+    //  Example: "2348012345678"
+    // ============================================
+    const WHATSAPP_NUMBER = "2349038083761";
+
+    // ========== PRELOADER LOGIC ==========
+    const preloader = document.getElementById("preloader");
+
+    // Hide preloader after page loads
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        preloader.classList.add("hide");
+      }, 3500);
+    });
+
+    // Safety timeout
+    setTimeout(function () {
+      preloader.classList.add("hide");
+    }, 2500);
+
+    // When user clicks "Back to Home"
+    document.getElementById("backHomeBtn").addEventListener("click", function () {
+      // Show preloader again
+      preloader.classList.remove("hide");
+      document.querySelector(".preloader-img").textContent = "Going Home...";
+
+      // Redirect after short delay (change "index.html" to your real home page)
+      setTimeout(function () {
+        window.location.href = "index.html";
+      }, 4000);
+    });
+
+    // ========== REST OF THE CODE ==========
+    document.getElementById("date").min = new Date().toISOString().split("T")[0];
+
+    let selectedFileName = "";
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3000);
+    }
+
+    function handleFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Image too large (max 5MB)");
+        input.value = "";
+        return;
+      }
+
+      selectedFileName = file.name;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById("previewImg");
+        img.src = e.target.result;
+        img.style.display = "block";
+
+        document.getElementById("uploadContent").style.display = "none";
+        document.getElementById("removeBtn").style.display = "inline-block";
+        document.getElementById("uploadBox").classList.add("has-file");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeImage(e) {
+      e.stopPropagation();
+      selectedFileName = "";
+      document.getElementById("fileInput").value = "";
+      document.getElementById("previewImg").style.display = "none";
+      document.getElementById("previewImg").src = "";
+      document.getElementById("uploadContent").style.display = "block";
+      document.getElementById("removeBtn").style.display = "none";
+      document.getElementById("uploadBox").classList.remove("has-file");
+    }
+
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      document.querySelectorAll(".error").forEach(el => el.style.display = "none");
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const service = document.getElementById("service").value;
+      const date = document.getElementById("date").value;
+      const style = document.getElementById("style").value.trim();
+
+      let valid = true;
+
+      if (!name) {
+        document.getElementById("err-name").style.display = "block";
+        valid = false;
+      }
+      if (!email || !email.includes("@")) {
+        document.getElementById("err-email").style.display = "block";
+        valid = false;
+      }
+      if (!service) {
+        document.getElementById("err-service").style.display = "block";
+        valid = false;
+      }
+      if (!date) {
+        document.getElementById("err-date").style.display = "block";
+        valid = false;
+      }
+
+      if (!valid) {
+        showToast("Please fill all required fields");
+        return;
+      }
+
+      if (WHATSAPP_NUMBER.includes("XXXX") || WHATSAPP_NUMBER.length < 11) {
+        alert("You still need to put the real WhatsApp number in the code!\n\nFind this line:\nconst WHATSAPP_NUMBER = \"234XXXXXXXXXX\";\n\nChange it to the real number (example: \"2348012345678\")");
+        return;
+      }
+
+      const d = new Date(date + "T00:00:00");
+      const niceDate = d.toLocaleDateString("en-GB", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric"
+      });
+
+      let msg = "*New Appointment Booking* %0A%0A";
+      msg += "*Name:* " + name + "%0A";
+      msg += "*Email:* " + email + "%0A";
+      msg += "*Service:* " + service + "%0A";
+      msg += "*Preferred Date:* " + niceDate + "%0A";
+
+      if (style) {
+        msg += "%0A*Desired Style:*%0A" + style + "%0A";
+      }
+
+      if (selectedFileName) {
+        msg += "%0AClient uploaded a reference image: " + selectedFileName + "%0A(Please ask them to send the picture)";
+      }
+
+      msg += "%0A%0A_Sent from booking page_";
+
+      const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg;
+      
+      showToast("Opening WhatsApp...");
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
